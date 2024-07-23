@@ -1,0 +1,1208 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 14.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     47542,       1200]
+NotebookOptionsPosition[     47047,       1184]
+NotebookOutlinePosition[     47490,       1201]
+CellTagsIndexPosition[     47447,       1198]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"CheckList", "[", "y_", "]"}], ":=", 
+   RowBox[{"MemberQ", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"Head", "[", "y", "]"}], "}"}], ",", "List"}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CheckSymbol", "[", "y_", "]"}], ":=", 
+   RowBox[{"MemberQ", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"Head", "[", "y", "]"}], "}"}], ",", "Symbol"}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CheckNumberN", "[", "y_", "]"}], ":=", 
+   RowBox[{"MemberQ", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"Head", "[", "y", "]"}], "}"}], ",", "Integer"}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"CheckRealN", "[", "y_", "]"}], ":=", 
+    RowBox[{"MemberQ", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"Head", "[", "y", "]"}], "}"}], ",", "Real"}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\n", 
+ RowBox[{
+  RowBox[{"CheckNodes", "[", "x_", "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Length", "[", 
+      RowBox[{"Flatten", "[", "x", "]"}], "]"}], "==", "0"}], ",", 
+    RowBox[{"Message", "[", 
+     RowBox[{"CheckNodes", "::", "Error2"}], "]"}], ",", 
+    RowBox[{"Print", "[", 
+     RowBox[{"Style", "[", 
+      RowBox[{"\"\<The network is not empty.\>\"", ",", 
+       RowBox[{"RGBColor", "[", 
+        RowBox[{"0", ",", "1", ",", "0"}], "]"}]}], "]"}], "]"}]}], 
+   "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"CheckNodes", "::", "Error2"}], "=", 
+    "\"\<The network is empty.\>\""}], ";"}], "\[IndentingNewLine]"}], "\n", 
+ RowBox[{
+  RowBox[{"CheckRepeatedNodes", "[", "t_", "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Length", "[", 
+      RowBox[{"Flatten", "[", "t", "]"}], "]"}], "==", 
+     RowBox[{"Length", "[", 
+      RowBox[{"DeleteDuplicates", "[", 
+       RowBox[{"Flatten", "[", "t", "]"}], "]"}], "]"}]}], ",", 
+    RowBox[{"Print", "[", 
+     RowBox[{"Style", "[", 
+      RowBox[{"\"\<The network does not contain repeated nodes.\>\"", ",", 
+       RowBox[{"RGBColor", "[", 
+        RowBox[{"0", ",", "1", ",", "0"}], "]"}]}], "]"}], "]"}], ",", 
+    RowBox[{"Message", "[", 
+     RowBox[{"CheckRepeatedNodes", "::", "Error3"}], "]"}]}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"CheckRepeatedNodes", "::", "Error3"}], "=", 
+    "\"\<The network contains repeated nodes.\>\""}], ";"}], 
+  "\[IndentingNewLine]"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ComputeNodes", "[", "net_", "]"}], ":=", 
+   RowBox[{"Do", "[", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"CheckList", "[", 
+        RowBox[{"net", "[", 
+         RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Depth", "[", 
+           RowBox[{"net", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], "]"}], "==", "2"}], ",", 
+         RowBox[{"AppendTo", "[", 
+          RowBox[{"countclosingbrackets", ",", 
+           RowBox[{"net", "[", 
+            RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ",", 
+         RowBox[{"ComputeNodes", "[", 
+          RowBox[{"net", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], "]"}]}], "]"}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "1", ",", 
+       RowBox[{"Length", "[", "net", "]"}]}], "}"}]}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\n", 
+ RowBox[{
+  RowBox[{"CheckBracketsNetwork", "[", "net_", "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"net", "==", 
+       RowBox[{"{", "}"}]}], ",", 
+      RowBox[{"Message", "[", 
+       RowBox[{"CheckBracketsNetwork", "::", "Error4"}], "]"}], ",", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"CheckList", "[", 
+         RowBox[{"First", "[", "net", "]"}], "]"}], ",", 
+        RowBox[{"Message", "[", 
+         RowBox[{"CheckBracketsNetwork", "::", "Error5"}], "]"}], ",", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Length", "[", "net", "]"}], "==", "1"}], ",", 
+          RowBox[{"AppendTo", "[", 
+           RowBox[{"countsourcenodes", ",", "net"}], "]"}], ",", 
+          RowBox[{"Do", "[", 
+           RowBox[{
+            RowBox[{"CheckBracketsNetwork", "[", 
+             RowBox[{
+              RowBox[{"Rest", "[", "net", "]"}], "[", 
+              RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", "1", ",", 
+              RowBox[{"Length", "[", 
+               RowBox[{"Rest", "[", "net", "]"}], "]"}]}], "}"}]}], "]"}]}], 
+         "]"}]}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+    "countsourcenodes"}], ")"}]}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CheckBracketsNetwork", "::", "Error4"}], "=", 
+   "\"\<The network contains empty sub list.\>\""}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"CheckBracketsNetwork", "::", "Error5"}], "=", 
+    "\"\<The network has wrong number of brackets.\>\""}], ";"}], 
+  "\[IndentingNewLine]"}], "\n", 
+ RowBox[{
+  RowBox[{"CheckUnpairedNodes", "[", "net_", "]"}], ":=", 
+  RowBox[{"Do", "[", 
+   RowBox[{
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"CheckList", "[", 
+       RowBox[{"net", "[", 
+        RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
+      RowBox[{"CheckUnpairedNodes", "[", 
+       RowBox[{"net", "[", 
+        RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
+      RowBox[{"Message", "[", 
+       RowBox[{"CheckUnpairedNodes", "::", "Error6"}], "]"}]}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"i", ",", "2", ",", 
+      RowBox[{"Length", "[", "net", "]"}]}], "}"}]}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"CheckUnpairedNodes", "::", "Error6"}], "=", 
+    "\"\<The network contains unpaired nodes.\>\""}], ";"}], 
+  "\[IndentingNewLine]"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CheckUnpairedSourceNodes", "[", "net_", "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"countclosingbrackets", "=", 
+      RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"countsourcenodes", "=", 
+      RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ComputeNodes", "[", "net", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"CheckBracketsNetwork", "[", "net", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "countsourcenodes", "]"}], "==", 
+        RowBox[{"Length", "[", "countclosingbrackets", "]"}]}], ",", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"Print", "[", 
+          RowBox[{"Style", "[", 
+           RowBox[{"\"\<The source nodes are:\>\"", ",", 
+            RowBox[{"RGBColor", "[", 
+             RowBox[{"0", ",", "1", ",", "0"}], "]"}]}], "]"}], "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Print", "[", "countsourcenodes", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Print", "[", "\"\<Checking internal nodes...\>\"", "]"}], 
+         ";", "\[IndentingNewLine]", 
+         RowBox[{"CheckUnpairedNodes", "[", "net", "]"}], ";"}], ")"}], ",", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"Print", "[", 
+          RowBox[{"Style", "[", 
+           RowBox[{
+           "\"\<There are source nodes unpaired.\nThe correct ones are:\>\"", 
+            ",", 
+            RowBox[{"RGBColor", "[", 
+             RowBox[{"1", ",", "0.75", ",", "0"}], "]"}]}], "]"}], "]"}], ";",
+          "\[IndentingNewLine]", 
+         RowBox[{"Print", "[", "countsourcenodes", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Message", "[", 
+          RowBox[{"CheckUnpairedSourceNodes", "::", "Error7"}], "]"}]}], 
+        ")"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Clear", "[", "countclosingbrackets", "]"}], ";", 
+       RowBox[{"Clear", "[", "countsourcenodes", "]"}], ";"}], ")"}]}], 
+    ")"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"CheckUnpairedSourceNodes", "::", "Error7"}], "=", 
+    "\"\<There are some source nodes unpaired.\>\""}], ";"}], 
+  "\[IndentingNewLine]"}], "\n", 
+ RowBox[{
+  RowBox[{"VerifyNetwork", "[", "z_", "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"CheckList", "[", "z", "]"}], ",", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"Print", "[", 
+         RowBox[{"Style", "[", 
+          RowBox[{"\"\<The network is a list.\>\"", ",", 
+           RowBox[{"RGBColor", "[", 
+            RowBox[{"0", ",", "1", ",", "0"}], "]"}]}], "]"}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"CheckNodes", "[", "z", "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"CheckRepeatedNodes", "[", "z", "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"CheckUnpairedSourceNodes", "[", "z", "]"}], ";"}], ")"}], 
+      ",", 
+      RowBox[{"Message", "[", 
+       RowBox[{"VerifyNetwork", "::", "Error1"}], "]"}]}], "]"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+    "Print", "[", 
+     "\"\<Checks concluded! Verification of the hydrographic network is \
+complete!\>\"", "]"}]}], ")"}]}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"VerifyNetwork", "::", "Error1"}], "=", 
+    "\"\<The network must be a list.\>\""}], ";"}], 
+  "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"SubnodeFinder", "[", 
+    RowBox[{"net_", ",", "node_"}], "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Clear", "[", "subnode", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Clear", "[", "DownPointer", "]"}], ";", 
+     RowBox[{"Clear", "[", "ListPointer", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DownPointer", "=", 
+      RowBox[{"Drop", "[", 
+       RowBox[{
+        RowBox[{"Flatten", "[", 
+         RowBox[{"Position", "[", 
+          RowBox[{"net", ",", "node"}], "]"}], "]"}], ",", 
+        RowBox[{"-", "2"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ListPointer", "=", 
+      RowBox[{"Extract", "[", 
+       RowBox[{"net", ",", "DownPointer"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"ListPointer", "==", 
+        RowBox[{"{", "}"}]}], ",", 
+       RowBox[{"subnode", "=", 
+        RowBox[{"First", "[", "net", "]"}]}], ",", 
+       RowBox[{"subnode", "=", 
+        RowBox[{"First", "[", "ListPointer", "]"}]}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Clear", "[", "DownPointer", "]"}], ";", 
+     RowBox[{"Clear", "[", "ListPointer", "]"}], ";", "subnode"}], ")"}]}], 
+  "\[IndentingNewLine]"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ComputeP", "[", 
+    RowBox[{"net_", ",", "P_"}], "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Clear", "[", "flatnet", "]"}], ";", 
+     RowBox[{"flatnet", "=", 
+      RowBox[{"Rest", "[", 
+       RowBox[{"Flatten", "[", "net", "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"P", "[", 
+        RowBox[{
+         RowBox[{"flatnet", "[", 
+          RowBox[{"[", "j", "]"}], "]"}], ",", 
+         RowBox[{"SubnodeFinder", "[", 
+          RowBox[{"net", ",", 
+           RowBox[{"flatnet", "[", 
+            RowBox[{"[", "j", "]"}], "]"}]}], "]"}]}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"j", ",", "1", ",", 
+         RowBox[{"Length", "[", "flatnet", "]"}]}], "}"}]}], "]"}]}], ")"}]}],
+   "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"EqualizeP", "[", 
+    RowBox[{"net_", ",", "P_", ",", "c_"}], "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Clear", "[", "flatnet", "]"}], ";", 
+     RowBox[{"flatnet", "=", 
+      RowBox[{"Rest", "[", 
+       RowBox[{"Flatten", "[", "net", "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Do", "[", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"P", "[", 
+           RowBox[{
+            RowBox[{"flatnet", "[", 
+             RowBox[{"[", "j", "]"}], "]"}], ",", 
+            RowBox[{"SubnodeFinder", "[", 
+             RowBox[{"net", ",", 
+              RowBox[{"flatnet", "[", 
+               RowBox[{"[", "j", "]"}], "]"}]}], "]"}]}], "]"}], "=", "c"}], 
+         ";"}], ")"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"j", ",", "1", ",", 
+         RowBox[{"Length", "[", "flatnet", "]"}]}], "}"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Clear", "[", "subnode", "]"}], ";"}], ")"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RatioL", "[", 
+    RowBox[{"x", ",", "y"}], "]"}], ":=", 
+   RowBox[{"N", "[", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"L", "[", 
+       RowBox[{"x", ",", "y"}], "]"}], ")"}], "/", 
+     RowBox[{"(", "Lb", ")"}]}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"AdditionalNodes", "[", 
+     RowBox[{"x_", ",", "y_"}], "]"}], ":=", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"CheckNumberN", "[", "y", "]"}], ",", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"y", "==", "0"}], ",", "0", ",", 
+        RowBox[{
+         RowBox[{"Round", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"L", "[", 
+               RowBox[{"x", ",", "y"}], "]"}], ")"}], "/", 
+             RowBox[{"(", "Lb", ")"}]}], ")"}], ",", "1"}], "]"}], "-", 
+         "1"}]}], "]"}], ",", 
+      RowBox[{
+       RowBox[{"Round", "[", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"L", "[", 
+             RowBox[{"x", ",", "y"}], "]"}], ")"}], "/", 
+           RowBox[{"(", "Lb", ")"}]}], ")"}], ",", "1"}], "]"}], "-", "1"}]}],
+      "]"}]}], ";"}], "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"CreateAdditionalLists", "[", 
+     RowBox[{"x_", ",", "y_", ",", "P_"}], "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"q", "=", 
+         RowBox[{"{", "x", "}"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"Do", "[", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"m", "=", 
+             RowBox[{"Join", "[", 
+              RowBox[{
+               RowBox[{"ToExpression", "[", 
+                RowBox[{"{", 
+                 RowBox[{"StringJoin", "[", 
+                  RowBox[{
+                   RowBox[{"ToString", "[", "x", "]"}], ",", "\"\<Link\>\"", 
+                   ",", 
+                   RowBox[{"ToString", "[", "i", "]"}], ",", "\"\<of\>\"", 
+                   ",", 
+                   RowBox[{"ToString", "[", 
+                    RowBox[{"AdditionalNodes", "[", 
+                    RowBox[{"x", ",", "y"}], "]"}], "]"}]}], "]"}], "}"}], 
+                "]"}], ",", 
+               RowBox[{"{", "q", "}"}]}], "]"}]}], ";", 
+            RowBox[{"Clear", "[", "q", "]"}], ";", "\[IndentingNewLine]", 
+            RowBox[{"q", "=", "m"}], ";", "\[IndentingNewLine]", 
+            RowBox[{"Clear", "[", "m", "]"}], ";"}], ")"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1", ",", 
+            RowBox[{"AdditionalNodes", "[", 
+             RowBox[{"x", ",", "y"}], "]"}]}], "}"}]}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"AdditionalList", "[", 
+          RowBox[{"x", ",", "y"}], "]"}], "=", "q"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"ListToNest", "[", "x", "]"}], "=", 
+         RowBox[{"AdditionalList", "[", 
+          RowBox[{"x", ",", "y"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"Clear", "[", "q", "]"}], ";"}], ")"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"EqualizeP", "[", 
+         RowBox[{
+          RowBox[{"AdditionalList", "[", 
+           RowBox[{"x", ",", "y"}], "]"}], ",", "P", ",", 
+          RowBox[{"P", "[", 
+           RowBox[{"x", ",", "y"}], "]"}]}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"P", "[", 
+          RowBox[{
+           RowBox[{"First", "[", 
+            RowBox[{"AdditionalList", "[", 
+             RowBox[{"x", ",", "y"}], "]"}], "]"}], ",", "y"}], "]"}], "=", 
+         RowBox[{"P", "[", 
+          RowBox[{"x", ",", "y"}], "]"}]}], ";"}], ")"}]}], ")"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"InitializeNetwork", "[", 
+    RowBox[{"net_", ",", "P_"}], "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Print", "[", "\"\<Initializing the network...\>\"", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+     "Print", "[", 
+      "\"\<Please insert the lengths of branches starting by the upstream \
+node and\nending with the downstream node.\>\"", "]"}], ";", 
+     RowBox[{
+     "Print", "[", 
+      "\"\<If the values of the lengths appear, the network\nhas been already \
+initialized.\nThe lengths inserted are:\>\"", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Print", "[", 
+      RowBox[{"ComputeP", "[", 
+       RowBox[{"net", ",", "L"}], "]"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Print", "[", "\"\<The remaining lengths are:\>\"", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Print", "[", "\"\<It is necessary to define the P.\>\"", "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{
+     "Print", "[", 
+      "\"\<If the values of P appear,\nthe network has been already \
+initialized, otherwise P values to define are:\>\"", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Print", "[", 
+      RowBox[{"ComputeP", "[", 
+       RowBox[{"net", ",", "P"}], "]"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Print", "[", 
+      RowBox[{"\"\<The network has the subsequent number of nodes: \>\"", ",", 
+       RowBox[{"Length", "[", 
+        RowBox[{"Flatten", "[", "net", "]"}], "]"}], ",", "\"\<.\>\""}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+     "Print", "[", "\"\<It is possible to compute the new nested network\>\"",
+       "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Clear", "[", "subnode", "]"}], ";"}], ")"}]}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"NestingNetwork", "[", "net_", "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Clear", "[", "nestdnet", "]"}], ";", 
+     RowBox[{"flatnet", "=", 
+      RowBox[{"Rest", "[", 
+       RowBox[{"Flatten", "[", "net", "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"nestdnet", "=", "net"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Do", "[", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"Pointer", "=", 
+          RowBox[{"Drop", "[", 
+           RowBox[{
+            RowBox[{"Flatten", "[", 
+             RowBox[{"Position", "[", 
+              RowBox[{"nestdnet", ",", 
+               RowBox[{"flatnet", "[", 
+                RowBox[{"[", "n", "]"}], "]"}]}], "]"}], "]"}], ",", 
+            RowBox[{"-", "1"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"Clear", "[", "ListPointer", "]"}], ";", 
+         RowBox[{"ListPointer", "=", "nestdnet"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"p", "=", 
+          RowBox[{"Extract", "[", 
+           RowBox[{"ListPointer", ",", "Pointer"}], "]"}]}], ";", 
+         RowBox[{"Clear", "[", "ListPointer", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"ListPointer", "=", "p"}], ";", 
+         RowBox[{"Clear", "[", "p", "]"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"Clear", "[", "restListPointer", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"RestListPointer", "=", 
+          RowBox[{"Rest", "[", "ListPointer", "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"RestListPointer", "==", 
+            RowBox[{"{", "}"}]}], ",", 
+           RowBox[{"nestedpart", "=", 
+            RowBox[{"ListToNest", "[", 
+             RowBox[{"flatnet", "[", 
+              RowBox[{"[", "n", "]"}], "]"}], "]"}]}], ",", 
+           RowBox[{
+            RowBox[{"nestedpart", "=", 
+             RowBox[{"Insert", "[", 
+              RowBox[{
+               RowBox[{"ListToNest", "[", 
+                RowBox[{"flatnet", "[", 
+                 RowBox[{"[", "n", "]"}], "]"}], "]"}], ",", 
+               RowBox[{"RestListPointer", "[", 
+                RowBox[{"[", "1", "]"}], "]"}], ",", 
+               RowBox[{"Table", "[", 
+                RowBox[{"2", ",", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{"Depth", "[", 
+                    RowBox[{"ListToNest", "[", 
+                    RowBox[{"flatnet", "[", 
+                    RowBox[{"[", "n", "]"}], "]"}], "]"}], "]"}], "-", "1"}], 
+                  ")"}]}], "]"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+            RowBox[{"Do", "[", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{"nestedpart", "=", 
+                RowBox[{"Insert", "[", 
+                 RowBox[{"nestedpart", ",", 
+                  RowBox[{
+                   RowBox[{"Rest", "[", "RestListPointer", "]"}], "[", 
+                   RowBox[{"[", "w", "]"}], "]"}], ",", 
+                  RowBox[{"Append", "[", 
+                   RowBox[{
+                    RowBox[{"Table", "[", 
+                    RowBox[{"2", ",", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"Depth", "[", 
+                    RowBox[{"ListToNest", "[", 
+                    RowBox[{"flatnet", "[", 
+                    RowBox[{"[", "n", "]"}], "]"}], "]"}], "]"}], "-", "2"}], 
+                    ")"}]}], "]"}], ",", 
+                    RowBox[{"2", "+", "w"}]}], "]"}]}], "]"}]}], ")"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"w", ",", "1", ",", 
+                RowBox[{"Length", "[", 
+                 RowBox[{"Rest", "[", "RestListPointer", "]"}], "]"}]}], 
+               "}"}]}], "]"}], ";"}]}], "]"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"nestdnet", "=", 
+          RowBox[{"ReplacePart", "[", 
+           RowBox[{"nestdnet", ",", 
+            RowBox[{"Pointer", "->", "nestedpart"}]}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Clear", "[", "nestedpart", "]"}], ";"}], ")"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", 
+         RowBox[{"Length", "[", "flatnet", "]"}]}], "}"}]}], "]"}], ";"}], 
+    ")"}]}], "\[IndentingNewLine]", "\n", 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CreateNestedNetwork", "[", 
+    RowBox[{"net_", ",", "Lbase_", ",", "P_"}], "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Lb", "=", "Lbase"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ComputeP", "[", 
+      RowBox[{"net", ",", "RatioL"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ComputeP", "[", 
+      RowBox[{"net", ",", "AdditionalSubLengths"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"ComputeP", "[", 
+      RowBox[{"net", ",", "AdditionalNodes"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Couples", "=", 
+      RowBox[{"ComputeP", "[", 
+       RowBox[{"net", ",", "couple"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Print", "[", 
+      RowBox[{
+      "\"\<The base length is: \>\"", ",", "Lbase", ",", " ", "\"\< m.\>\""}],
+       "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Print", "[", 
+      RowBox[{"\"\<The number of additional nodes to \>\"", ",", 
+       RowBox[{"Length", "[", 
+        RowBox[{"Flatten", "[", "net", "]"}], "]"}], ",", 
+       "\"\< existing nodes is: \>\"", ",", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Total", "[", 
+          RowBox[{"ComputeP", "[", 
+           RowBox[{"net", ",", "AdditionalNodes"}], "]"}], "]"}]}], ")"}], 
+       ",", "\"\<. The total number of nodes is \>\"", ",", 
+       RowBox[{
+        RowBox[{"Length", "[", 
+         RowBox[{"Flatten", "[", "net", "]"}], "]"}], "+", "1", "+", 
+        RowBox[{"Total", "[", 
+         RowBox[{"ComputeP", "[", 
+          RowBox[{"net", ",", "AdditionalNodes"}], "]"}], "]"}]}], ",", 
+       "\"\<.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+     "Print", "[", 
+      "\"\<Furthermore, P of each branch is the same of the initial branch.\>\
+\"", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Do", "[", 
+      RowBox[{
+       RowBox[{"CreateAdditionalLists", "[", 
+        RowBox[{
+         RowBox[{"First", "[", 
+          RowBox[{"Couples", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
+         RowBox[{"Last", "[", 
+          RowBox[{"Couples", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", "P"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", 
+         RowBox[{"Length", "[", "Couples", "]"}]}], "}"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Clear", "[", "subnode", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"NestingNetwork", "[", "net", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Print", "[", 
+      RowBox[{"\"\<The depth of the nesting nested network is: \>\"", ",", 
+       RowBox[{"Depth", "[", "nestdnet", "]"}], ",", "\"\<.\>\""}], "]"}], 
+     ";", "\[IndentingNewLine]", "nestdnet"}], ")"}]}], "\n", 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"MEDownPointer", "[", 
+    RowBox[{"net_", ",", "j_"}], "]"}], ":=", 
+   RowBox[{"Drop", "[", 
+    RowBox[{
+     RowBox[{"Flatten", "[", 
+      RowBox[{"Position", "[", 
+       RowBox[{"net", ",", 
+        RowBox[{"flatnet", "[", 
+         RowBox[{"[", "j", "]"}], "]"}]}], "]"}], "]"}], ",", 
+     RowBox[{"-", "2"}]}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"MELUpPointer", "[", 
+    RowBox[{"net_", ",", "j_"}], "]"}], ":=", 
+   RowBox[{"Drop", "[", 
+    RowBox[{
+     RowBox[{"Flatten", "[", 
+      RowBox[{"Position", "[", 
+       RowBox[{"net", ",", 
+        RowBox[{"flatnet", "[", 
+         RowBox[{"[", "j", "]"}], "]"}]}], "]"}], "]"}], ",", 
+     RowBox[{"-", "1"}]}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"MEListDownPointer", "[", 
+    RowBox[{"net_", ",", "j_"}], "]"}], ":=", 
+   RowBox[{"Extract", "[", 
+    RowBox[{"net", ",", 
+     RowBox[{"MEDownPointer", "[", 
+      RowBox[{"net", ",", "j"}], "]"}]}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"MESubnodeFinder", "[", 
+    RowBox[{"net_", ",", "j_"}], "]"}], ":=", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"MEListDownPointer", "[", 
+       RowBox[{"net", ",", "j"}], "]"}], "==", 
+      RowBox[{"{", "}"}]}], ",", 
+     RowBox[{"AppendTo", "[", 
+      RowBox[{"MEsubnode", ",", 
+       RowBox[{"First", "[", "net", "]"}]}], "]"}], ",", 
+     RowBox[{"AppendTo", "[", 
+      RowBox[{"MEsubnode", ",", 
+       RowBox[{"First", "[", 
+        RowBox[{"MEListDownPointer", "[", 
+         RowBox[{"net", ",", "j"}], "]"}], "]"}]}], "]"}]}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"MEListUpPointer", "[", 
+    RowBox[{"net_", ",", "j_"}], "]"}], ":=", 
+   RowBox[{"Extract", "[", 
+    RowBox[{"net", ",", 
+     RowBox[{"MELUpPointer", "[", 
+      RowBox[{"net", ",", "j"}], "]"}]}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"MESupernodesFinder", "[", 
+     RowBox[{"net_", ",", "j_"}], "]"}], ":=", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Rest", "[", 
+        RowBox[{"MEListUpPointer", "[", 
+         RowBox[{"net", ",", "j"}], "]"}], "]"}], "==", 
+       RowBox[{"{", "}"}]}], ",", 
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"MEsupernodes", ",", 
+        RowBox[{"{", "}"}]}], "]"}], ",", 
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"MEsupernodes", ",", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"First", "[", 
+           RowBox[{
+            RowBox[{"Rest", "[", 
+             RowBox[{"MEListUpPointer", "[", 
+              RowBox[{"net", ",", "j"}], "]"}], "]"}], "[", 
+            RowBox[{"[", "k", "]"}], "]"}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k", ",", "1", ",", 
+            RowBox[{"Length", "[", 
+             RowBox[{"Rest", "[", 
+              RowBox[{"MEListUpPointer", "[", 
+               RowBox[{"net", ",", "j"}], "]"}], "]"}], "]"}]}], "}"}]}], 
+         "]"}]}], "]"}]}], "]"}]}], ";"}], "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"LocalNodes", "[", 
+   RowBox[{"net_", ",", "j_"}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"MEDownPointer", "[", 
+     RowBox[{"net", ",", "j"}], "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"MELUpPointer", "[", 
+     RowBox[{"net", ",", "j"}], "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"MEListDownPointer", "[", 
+     RowBox[{"net", ",", "j"}], "]"}], ";", 
+    RowBox[{"MESubnodeFinder", "[", 
+     RowBox[{"net", ",", "j"}], "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"MEListUpPointer", "[", 
+     RowBox[{"net", ",", "j"}], "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"MESupernodesFinder", "[", 
+     RowBox[{"net", ",", "j"}], "]"}], ";"}], ")"}]}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"Truncation", "[", "x_", "]"}], ":=", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"x", "<", "truncation"}], ",", "0", ",", "x"}], "]"}]}], ";"}], 
+  "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"ComputeMasterEquations", "[", 
+     RowBox[{"net_", ",", "rho_", ",", "m_", ",", "n_", ",", "P_"}], "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"truncation", "=", 
+       RowBox[{"10", "^", 
+        RowBox[{"-", "5"}]}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"progression", "=", 
+       RowBox[{"PrintTemporary", "[", 
+        RowBox[{"\"\<Computing:\>\"", ",", 
+         RowBox[{"Dynamic", "[", "status", "]"}]}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Print", "[", 
+       RowBox[{"\"\<The necessary time is\>\"", ",", 
+        RowBox[{"First", "[", 
+         RowBox[{"AbsoluteTiming", "[", 
+          RowBox[{
+           RowBox[{"(", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"Clear", "[", "flatnet", "]"}], ";", 
+             RowBox[{"flatnet", "=", 
+              RowBox[{"Rest", "[", 
+               RowBox[{"Flatten", "[", "net", "]"}], "]"}]}], ";", 
+             RowBox[{"Lcycle", "=", 
+              RowBox[{"Length", "[", "flatnet", "]"}]}], ";", 
+             "\[IndentingNewLine]", 
+             RowBox[{"Clear", "[", "MEsubnode", "]"}], ";", 
+             RowBox[{"Clear", "[", "MEsupernodes", "]"}], ";", 
+             "\[IndentingNewLine]", 
+             RowBox[{"MEsubnode", "=", 
+              RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+             RowBox[{"MEsupernodes", "=", 
+              RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+             RowBox[{"Do", "[", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{"LocalNodes", "[", 
+                 RowBox[{"net", ",", "j"}], "]"}], ")"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"j", ",", "1", ",", "Lcycle"}], "}"}]}], "]"}], ";", 
+             "\[IndentingNewLine]", 
+             RowBox[{"firstsupernodes", "=", 
+              RowBox[{"Table", "[", 
+               RowBox[{
+                RowBox[{"First", "[", 
+                 RowBox[{
+                  RowBox[{"Rest", "[", "net", "]"}], "[", 
+                  RowBox[{"[", "k", "]"}], "]"}], "]"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"k", ",", "1", ",", 
+                  RowBox[{"Length", "[", 
+                   RowBox[{"Rest", "[", "net", "]"}], "]"}]}], "}"}]}], 
+               "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+             RowBox[{"matrixPsubnodes", "=", 
+              RowBox[{"Table", "[", 
+               RowBox[{
+                RowBox[{"P", "[", 
+                 RowBox[{
+                  RowBox[{"flatnet", "[", 
+                   RowBox[{"[", "w", "]"}], "]"}], ",", 
+                  RowBox[{"MEsubnode", "[", 
+                   RowBox[{"[", "w", "]"}], "]"}]}], "]"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"w", ",", "1", ",", "Lcycle"}], "}"}]}], "]"}]}], 
+             ";", "\[IndentingNewLine]", 
+             RowBox[{"matrixPsupernodes", "=", 
+              RowBox[{"Table", "[", 
+               RowBox[{
+                RowBox[{"(", 
+                 RowBox[{"If", "[", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"MEsupernodes", "[", 
+                    RowBox[{"[", "w", "]"}], "]"}], "==", 
+                    RowBox[{"{", "}"}]}], ",", "0", ",", 
+                   RowBox[{"Table", "[", 
+                    RowBox[{
+                    RowBox[{"P", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"MEsupernodes", "[", 
+                    RowBox[{"[", "w", "]"}], "]"}], "[", 
+                    RowBox[{"[", "q", "]"}], "]"}], ",", 
+                    RowBox[{"flatnet", "[", 
+                    RowBox[{"[", "w", "]"}], "]"}]}], "]"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"q", ",", "1", ",", 
+                    RowBox[{"Length", "[", 
+                    RowBox[{"MEsupernodes", "[", 
+                    RowBox[{"[", "w", "]"}], "]"}], "]"}]}], "}"}]}], "]"}]}],
+                   "]"}], ")"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"w", ",", "1", ",", "Lcycle"}], "}"}]}], "]"}]}], 
+             ";", "\[IndentingNewLine]", 
+             RowBox[{"matrixrhosupernodes", "=", 
+              RowBox[{"Table", "[", 
+               RowBox[{
+                RowBox[{"(", 
+                 RowBox[{"If", "[", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"MEsupernodes", "[", 
+                    RowBox[{"[", "w", "]"}], "]"}], "==", 
+                    RowBox[{"{", "}"}]}], ",", "0", ",", 
+                   RowBox[{"Table", "[", 
+                    RowBox[{
+                    RowBox[{"rho", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"MEsupernodes", "[", 
+                    RowBox[{"[", "w", "]"}], "]"}], "[", 
+                    RowBox[{"[", "q", "]"}], "]"}], ",", 
+                    RowBox[{"m", "-", "1"}]}], "]"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"q", ",", "1", ",", 
+                    RowBox[{"Length", "[", 
+                    RowBox[{"MEsupernodes", "[", 
+                    RowBox[{"[", "w", "]"}], "]"}], "]"}]}], "}"}]}], "]"}]}],
+                   "]"}], ")"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"w", ",", "1", ",", "Lcycle"}], "}"}]}], "]"}]}], 
+             ";", "\[IndentingNewLine]", 
+             RowBox[{"matrix", "=", 
+              RowBox[{"Table", "[", 
+               RowBox[{
+                RowBox[{"rho", "[", 
+                 RowBox[{
+                  RowBox[{"flatnet", "[", 
+                   RowBox[{"[", "w", "]"}], "]"}], ",", 
+                  RowBox[{"m", "-", "1"}]}], "]"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"w", ",", "1", ",", "Lcycle"}], "}"}]}], "]"}]}], 
+             ";", "\[IndentingNewLine]", 
+             RowBox[{"Do", "[", "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"(", "\[IndentingNewLine]", 
+                RowBox[{
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"rho", "[", 
+                    RowBox[{
+                    RowBox[{"First", "[", "net", "]"}], ",", "i"}], "]"}], 
+                    "=", 
+                    RowBox[{
+                    RowBox[{"rho", "[", 
+                    RowBox[{
+                    RowBox[{"First", "[", "net", "]"}], ",", 
+                    RowBox[{"i", "-", "1"}]}], "]"}], "+", 
+                    RowBox[{"Sum", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"rho", "[", 
+                    RowBox[{
+                    RowBox[{"firstsupernodes", "[", 
+                    RowBox[{"[", "c", "]"}], "]"}], ",", 
+                    RowBox[{"i", "-", "1"}]}], "]"}], "*", 
+                    RowBox[{"P", "[", 
+                    RowBox[{
+                    RowBox[{"firstsupernodes", "[", 
+                    RowBox[{"[", "c", "]"}], "]"}], ",", 
+                    RowBox[{"First", "[", "net", "]"}]}], "]"}]}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"c", ",", "1", ",", 
+                    RowBox[{"Length", "[", "firstsupernodes", "]"}]}], 
+                    "}"}]}], "]"}]}]}], ";"}], ")"}], ";", 
+                 "\[IndentingNewLine]", 
+                 RowBox[{"matrixproduct", "=", 
+                  RowBox[{"matrixrhosupernodes", "*", "matrixPsupernodes"}]}],
+                  ";", "\[IndentingNewLine]", 
+                 RowBox[{"matrixproduct", "=", 
+                  RowBox[{"Map", "[", 
+                   RowBox[{"Total", ",", "matrixproduct"}], "]"}]}], ";", 
+                 "\[IndentingNewLine]", 
+                 RowBox[{"matrix", "=", 
+                  RowBox[{"matrix", "-", 
+                   RowBox[{"matrix", "*", "matrixPsubnodes"}], "+", 
+                   "matrixproduct"}]}], ";", "\[IndentingNewLine]", 
+                 RowBox[{"matrix", "=", 
+                  RowBox[{"Map", "[", 
+                   RowBox[{"Truncation", ",", "matrix"}], "]"}]}], ";", 
+                 "\[IndentingNewLine]", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{"Do", "[", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"rho", "[", 
+                    RowBox[{
+                    RowBox[{"flatnet", "[", 
+                    RowBox[{"[", "j", "]"}], "]"}], ",", "i"}], "]"}], "=", 
+                    RowBox[{"matrix", "[", 
+                    RowBox[{"[", "j", "]"}], "]"}]}], ";"}], ")"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"j", ",", "1", ",", "Lcycle"}], "}"}]}], "]"}], 
+                   ";", "\[IndentingNewLine]", 
+                   RowBox[{"matrixrhosupernodes", "=", 
+                    RowBox[{"Table", "[", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"MEsupernodes", "[", 
+                    RowBox[{"[", "w", "]"}], "]"}], "==", 
+                    RowBox[{"{", "}"}]}], ",", "0", ",", 
+                    RowBox[{"Table", "[", 
+                    RowBox[{
+                    RowBox[{"rho", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"MEsupernodes", "[", 
+                    RowBox[{"[", "w", "]"}], "]"}], "[", 
+                    RowBox[{"[", "q", "]"}], "]"}], ",", "i"}], "]"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"q", ",", "1", ",", 
+                    RowBox[{"Length", "[", 
+                    RowBox[{"MEsupernodes", "[", 
+                    RowBox[{"[", "w", "]"}], "]"}], "]"}]}], "}"}]}], "]"}]}],
+                     "]"}], ")"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"w", ",", "1", ",", "Lcycle"}], "}"}]}], "]"}]}], 
+                   ";", "\n", 
+                   RowBox[{"status", "=", 
+                    RowBox[{"PercentForm", "[", 
+                    RowBox[{"N", "[", 
+                    RowBox[{
+                    RowBox[{"Round", "[", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"i", "-", "m"}], ")"}], "/", 
+                    RowBox[{"(", 
+                    RowBox[{"n", "-", "m"}], ")"}]}], ")"}], ",", "0.0001"}], 
+                    "]"}], ",", "4"}], "]"}], "]"}]}], ";"}], ")"}]}], "\n", 
+                ")"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"i", ",", "m", ",", "n"}], "}"}]}], "]"}], ";", "\n", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"NotebookDelete", "[", "progression", "]"}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"Clear", "[", "status", "]"}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"Clear", "[", "progression", "]"}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"Clear", "[", "truncation", "]"}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"Clear", "[", "Lcycle", "]"}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"Clear", "[", "matrix", "]"}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"Clear", "[", "matrixrhosupernodes", "]"}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"Clear", "[", "matrixPsubnode", "]"}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"Clear", "[", "matrixPsupernodes", "]"}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"Clear", "[", "matrixproduct", "]"}], ";"}], ")"}], 
+             ";"}], ")"}], ";"}], "]"}], "]"}], "\n", ",", 
+        "\"\<seconds.\>\""}], "]"}]}], ")"}]}], ";"}], "\[IndentingNewLine]", 
+  "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"PacletFind", "[", "\"\<IGraphM\>\"", "]"}], "==", 
+     RowBox[{"{", "}"}]}], ",", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+      "Get", "[", 
+       "\"\<https://raw.githubusercontent.com/szhorvat/IGraphM/master/\
+IGInstaller.m\>\"", "]"}], ";", 
+      RowBox[{"Quiet", "[", 
+       RowBox[{
+        RowBox[{"<<", "\"\<IGraphM`\>\""}], ";"}], "]"}]}], ")"}], ",", 
+    RowBox[{"Quiet", "[", 
+     RowBox[{
+      RowBox[{"<<", "\"\<IGraphM`\>\""}], ";"}], "]"}]}], "]"}], 
+  "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"ListRotate", "[", 
+     RowBox[{"net_", ",", "angle_"}], "]"}], ":=", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"CheckList", "[", 
+         RowBox[{"net", "[", 
+          RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
+        RowBox[{"ListRotate", "[", 
+         RowBox[{
+          RowBox[{"net", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], ",", "angle"}], "]"}], ",", 
+        RowBox[{"Rotate", "[", 
+         RowBox[{
+          RowBox[{"net", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], ",", 
+          RowBox[{"angle", " ", "Degree"}]}], "]"}]}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"i", ",", "1", ",", 
+        RowBox[{"Length", "[", "net", "]"}]}], "}"}]}], "]"}]}], ";"}], 
+  "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"RepresentNetwork", "[", 
+   RowBox[{"net_", ",", "angle_", ",", "x_", ",", "y_"}], "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"x", "\[Equal]", "False"}], ",", 
+    RowBox[{"Rotate", "[", 
+     RowBox[{
+      RowBox[{"IGExpressionTree", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Ruotalista", "[", 
+          RowBox[{"net", ",", 
+           RowBox[{"-", "angle"}]}], "]"}], "/.", 
+         RowBox[{"List", "\[Rule]", "Construct"}]}], ",", 
+        RowBox[{"VertexLabels", "\[Rule]", "None"}], ",", 
+        RowBox[{"EdgeStyle", "\[Rule]", 
+         RowBox[{"Arrowheads", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "y"}], ",", "0"}], "}"}], "]"}]}], ",", 
+        RowBox[{"DirectedEdges", "\[Rule]", "True"}], ",", 
+        RowBox[{"VertexStyle", "\[Rule]", "LightBlue"}], ",", 
+        RowBox[{"VertexSize", "\[Rule]", "Automatic"}]}], "]"}], ",", 
+      RowBox[{"angle", " ", "Degree"}]}], "]"}], ",", 
+    RowBox[{"Rotate", "[", 
+     RowBox[{
+      RowBox[{"IGExpressionTree", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"ListRotate", "[", 
+          RowBox[{"net", ",", 
+           RowBox[{"-", "angle"}]}], "]"}], "/.", 
+         RowBox[{"List", "\[Rule]", "Construct"}]}], ",", 
+        RowBox[{"EdgeStyle", "\[Rule]", 
+         RowBox[{"Arrowheads", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "y"}], ",", "0"}], "}"}], "]"}]}], ",", 
+        RowBox[{"DirectedEdges", "\[Rule]", "True"}], ",", 
+        RowBox[{"VertexStyle", "\[Rule]", "LightBlue"}], ",", 
+        RowBox[{"VertexSize", "\[Rule]", "Automatic"}]}], "]"}], ",", 
+      RowBox[{"angle", " ", "Degree"}]}], "]"}]}], "]"}]}]}], "Input",
+ CellChangeTimes->{{3.928809485241823*^9, 3.928809507231447*^9}, 
+   3.9288096342446327`*^9, 3.928810023369526*^9, {3.928810058487423*^9, 
+   3.92881006040345*^9}, {3.9288102274276257`*^9, 3.928810233264879*^9}, {
+   3.928810322643978*^9, 3.9288103428864975`*^9}, 3.9288103963978214`*^9, {
+   3.928810484912266*^9, 3.9288105462698746`*^9}, {3.9288109093973885`*^9, 
+   3.9288109171008835`*^9}, {3.9288110977074146`*^9, 3.9288111199832535`*^9}, 
+   3.928811198479391*^9, {3.928811459510666*^9, 3.9288114727370014`*^9}, {
+   3.928811517143202*^9, 3.9288115463762074`*^9}, {3.9288116111588383`*^9, 
+   3.9288116862817097`*^9}, {3.928812079189726*^9, 3.928812114280716*^9}, 
+   3.9288129091506233`*^9, {3.928813142872568*^9, 3.9288131454365273`*^9}, 
+   3.928813199243971*^9, 3.9288132991111393`*^9, 3.928813386280575*^9, 
+   3.928814313032015*^9, {3.92881467636784*^9, 3.928814679840523*^9}, {
+   3.928814871773945*^9, 3.9288148820443783`*^9}, 3.928814920175501*^9, {
+   3.9288153613913803`*^9, 3.928815363069807*^9}, {3.9288154879495754`*^9, 
+   3.928815491231884*^9}, 3.9288155305201836`*^9, {3.9288156604021225`*^9, 
+   3.928815665183441*^9}, {3.928815716427519*^9, 3.928815736075218*^9}, 
+   3.928815894849449*^9, {3.9288159360639267`*^9, 3.928815949891674*^9}, {
+   3.9288161682708473`*^9, 3.9288161792586403`*^9}, {3.9288163365171432`*^9, 
+   3.9288163425203724`*^9}, {3.9288164309589977`*^9, 3.9288164378518677`*^9}, 
+   3.9288165584223957`*^9, 3.9288167301391335`*^9, 3.9288167800549927`*^9, 
+   3.9288176249264584`*^9, {3.928817792450264*^9, 3.9288177950405273`*^9}, {
+   3.9288180785795536`*^9, 3.928818079471676*^9}, 3.9288190864427433`*^9, 
+   3.9288192089564304`*^9, {3.92881963029784*^9, 3.92881963233342*^9}, {
+   3.9288198558685627`*^9, 3.9288198568334084`*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"92c670b3-841a-9a4d-9bb7-b21771c33d28"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{3.928812076822321*^9},
+ CellLabel->"In[40]:=",ExpressionUUID->"ad6c08a1-f711-4842-9ec8-198adf8efa87"]
+},
+WindowSize->{569.25, 450.75},
+WindowMargins->{{3.75, Automatic}, {Automatic, 25.5}},
+Magnification:>0.75 Inherited,
+FrontEndVersion->"14.0 for Microsoft Windows (64-bit) (December 12, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"43687e5d-4c26-0c43-89f2-256bc64eb5ff"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 46335, 1158, 3218, "Input",ExpressionUUID->"92c670b3-841a-9a4d-9bb7-b21771c33d28"],
+Cell[46896, 1180, 147, 2, 21, "Input",ExpressionUUID->"ad6c08a1-f711-4842-9ec8-198adf8efa87"]
+}
+]
+*)
+
